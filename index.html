@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="renderer" content="webkit">
+    <link rel="dns-prefetch" href="//cdn.bootcss.com">
+
+    <title>Document</title>
+    <style type="text/css">
+        ul {
+            list-style: none;
+        }
+        
+        .tab {
+            overflow: hidden;
+        }
+        
+        .tab li {
+            float: left;
+            padding: 10px 40px;
+            background-color: #eee;
+            cursor: default;
+        }
+        
+        .tab li.active {
+            background: #09c;
+            color: #fff;
+        }
+        
+        .content {
+            position: relative;
+        }
+        
+        .content .item {
+            position: absolute;
+            top: 0;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .content .item li {
+            display: table-cell;
+            width: 300px;
+            height: 300px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .content .item img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+</head>
+
+<body>
+    <ul class="tab">
+        <li class="active">路飞</li>
+        <li>乔巴</li>
+        <li>索隆</li>
+    </ul>
+    <div class="content">
+        <ul class="item" style="display:block;">
+            <li><img src="images/loading.gif" data-original="images/lf1.jpg" alt=""></li>
+            <li><img src="images/loading.gif" data-original="images/lf2.jpg" alt=""></li>
+        </ul>
+        <ul class="item">
+            <li><img src="images/loading.gif" data-original="images/qb.png" alt=""></li>
+            <li><img src="images/loading.gif" data-original="images/qb2.jpg" alt=""></li>
+        </ul>
+        <ul class="item">
+            <li><img src="images/loading.gif" data-original="images/sl1.jpg" alt=""></li>
+            <li><img src="images/loading.gif" data-original="images/sl2.png" alt=""></li>
+        </ul>
+    </div>
+
+    <script>
+        $('[data-original]').lazyload({
+            // 强制不加载不可见的图片
+            skip_invisible: true
+        });
+
+        $('.tab').on('click', 'li', function() {
+            var
+                $this = $(this),
+                idx = $this.index(),
+                $curObj = $('.content').find('.item').eq(idx);
+
+            $this.addClass('active').siblings().removeClass('active');
+            $curObj.fadeIn().siblings().fadeOut();
+
+            // 当前容器懒加载初始化（不影响其他不可见图片，继续添加skip_invisible: true）
+            $('[data-original]').lazyload({
+                container: $curObj,
+                skip_invisible: true
+            });
+        });
+    </script>
+</body>
+
+</html>
